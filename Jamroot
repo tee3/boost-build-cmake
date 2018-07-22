@@ -1,0 +1,31 @@
+import print ;
+
+import "class" ;
+
+exe tmp : tmp.cpp ;
+
+make junk/CMakeLists.txt : tmp : @generate-cmakelists ;
+
+rule generate-cmakelists ( target : sources * : properties * )
+{
+  echo $(target) $(sources) $(properties) ;
+  if [ class.is-instance $(target) ]
+  {
+    echo hello [ $(target).name ] ;
+  }
+
+  # generate a modern CMakeLists.txt for sources given
+  print.output $(target) ;
+  print.text "cmake_minimum_version(3.5)" ;
+  print.text "" ;
+
+  for s in $(sources)
+  {
+    if [ class.is-instance $(s) ]
+    {
+      echo hello [ $(s).name ] ;
+    }
+    print.text "add_executable($(s))" ;
+    print.text "" ;
+  }
+}
